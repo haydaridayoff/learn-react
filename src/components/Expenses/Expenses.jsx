@@ -1,13 +1,14 @@
 import ExpenseItem from "./ExpenseItem";
+import Card from "../Global/Card";
 import "./Expenses.css";
 
 export default function Expenses(props) {
   return (
-    <div className="expenses">
+    <Card className="expenses">
       <ExpenseItem expense={props.expenses[0]} />
       <ExpenseItem expense={props.expenses[1]} />
       <ExpenseItem expense={props.expenses[2]} />
       <ExpenseItem expense={props.expenses[3]} />
-    </div>
+    </Card>
   );
 }
