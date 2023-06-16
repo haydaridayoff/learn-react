@@ -3,9 +3,9 @@ import ExpenseItem from "./ExpenseItem";
 import Card from "../Global/Card";
 import "./Expenses.css";
 
-export default function Expenses(props: {
+const Expenses: React.FC<{
   expenses: { title: string; amount: number; date: Date }[];
-}) {
+}> = (props) => {
   return (
     <Card className="expenses">
       <ExpenseItem expense={props.expenses[0]} />
@@ -14,4 +14,6 @@ export default function Expenses(props: {
       <ExpenseItem expense={props.expenses[3]} />
     </Card>
   );
-}
+};
+
+export default Expenses;
