@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./ExpenseForm.css";
+import ExpenseData from "../Model/ExpenseData";
 
-export default function ExpenseForm() {
+const ExpenseForm: React.FC<{
+  onSaveExpenseData: (expenseData: ExpenseData) => void;
+}> = (props) => {
   const addYearsToDate = (date: Date, years: number) => {
     let new_date = new Date(date);
 
@@ -11,16 +14,74 @@ export default function ExpenseForm() {
     return new_date;
   };
 
+  const [enteredExpenseFormInput, setEnteredExpenseFormInput] =
+    useState<ExpenseData>({
+      title: "",
+      amount: 0,
+      date: new Date(),
+    });
+
+  const inputChangeHandler = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    key: string
+  ) => {
+    setEnteredExpenseFormInput((prevState) => {
+      //In the future, don't set the key to the value of the input
+      let newState: any = event.target.value;
+      switch (key) {
+        case "amount":
+          newState = parseFloat(newState);
+          break;
+        case "date":
+          newState = new Date(newState);
+          break;
+        default:
+          break;
+      }
+      return {
+        ...prevState,
+        [key]: newState,
+      };
+    });
+    console.log(enteredExpenseFormInput);
+  };
+
+  function submitHandler(event: React.FormEvent<HTMLFormElement>): void {
+    event.preventDefault();
+    const expenseData: ExpenseData = {
+      ...enteredExpenseFormInput,
+    };
+    console.log("expenseData from ExpenseForm.tsx: \n" + expenseData);
+    props.onSaveExpenseData(expenseData);
+    setEnteredExpenseFormInput({
+      title: "",
+      amount: 0,
+      date: new Date(),
+    });
+  }
+
   return (
-    <form>
+    <form onSubmit={submitHandler}>
       <div className="new-expense__controls">
         <div className="new-expense__control">
           <label htmlFor="newExpenseForm">Title</label>
-          <input type="text" name="newExpenseForm" />
+          <input
+            type="text"
+            id="newExpenseForm"
+            value={enteredExpenseFormInput.title}
+            onChange={(event) => inputChangeHandler(event, "title")}
+          />
         </div>
         <div className="new-expense__control">
           <label htmlFor="newExpenseAmount">Amount</label>
-          <input type="number" min="0.01" step="0.01" name="newExpenseAmount" />
+          <input
+            type="number"
+            min="0.01"
+            step="0.01"
+            value={enteredExpenseFormInput.amount}
+            id="newExpenseAmount"
+            onChange={(event) => inputChangeHandler(event, "amount")}
+          />
         </div>
         <div className="new-expense__control">
           <label htmlFor="newExpenseDate">Date</label>
@@ -28,7 +89,9 @@ export default function ExpenseForm() {
             type="date"
             min={new Date().toISOString().split("T")[0]}
             max={addYearsToDate(new Date(), 5).toISOString().split("T")[0]}
-            name="newExpenseDate"
+            value={enteredExpenseFormInput.date.toISOString().split("T")[0]}
+            id="newExpenseDate"
+            onChange={(event) => inputChangeHandler(event, "date")}
           />
         </div>
       </div>
@@ -37,4 +100,6 @@ export default function ExpenseForm() {
       </div>
     </form>
   );
-}
+};
+
+export default ExpenseForm;

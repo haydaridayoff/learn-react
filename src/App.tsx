@@ -1,6 +1,7 @@
 import React from "react";
 import Expenses from "./components/Expenses/Expenses";
 import NewExpense from "./components/NewExpenses/NewExpense";
+import ExpenseData from "./components/Model/ExpenseData";
 
 function App() {
   const expenses = [
@@ -30,10 +31,15 @@ function App() {
     },
   ];
 
+  const addExpenseHandler = (ExpenseData: ExpenseData) => {
+    console.log("In App.tsx");
+    console.log(ExpenseData);
+  };
+
   return (
     <div>
       <h2>Let's get started!</h2>
-      <NewExpense></NewExpense>
+      <NewExpense onAddExpense={addExpenseHandler}></NewExpense>
       <Expenses expenses={expenses}></Expenses>
     </div>
   );
