@@ -13,8 +13,11 @@ const Expenses: React.FC<{
 
   const filterChangeHandler = (selectedYear: string) => {
     setSelectedYear(selectedYear);
-    console.log(selectedYear);
   };
+
+  const filteredExpenses = props.expenses.filter((expenseItem) => {
+    return expenseItem.date.getFullYear().toString() === selectedYear;
+  });
 
   return (
     <Card className="expenses">
@@ -24,11 +27,9 @@ const Expenses: React.FC<{
         minYear={2019}
         maxYear={2028}
       />
-      {props.expenses.map((expenseItem) => {
-        if (expenseItem.date.getFullYear().toString() === selectedYear) {
-          return <ExpenseItem key={expenseItem.id!} expense={expenseItem} />;
-        }
-      })}
+      {filteredExpenses.map((expenseItem) => (
+        <ExpenseItem key={expenseItem.id!} expense={expenseItem} />
+      ))}
     </Card>
   );
 };
