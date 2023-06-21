@@ -3,9 +3,12 @@ import React, { useState } from "react";
 import "./ExpenseForm.css";
 import ExpenseData from "../Model/ExpenseData";
 
-const ExpenseForm: React.FC<{
+interface Props {
   onSaveExpenseData: (expenseData: ExpenseData) => void;
-}> = (props) => {
+  onCancel?: () => void;
+}
+
+const ExpenseForm: React.FC<Props> = (props) => {
   const addYearsToDate = (date: Date, years: number) => {
     let new_date = new Date(date);
 
@@ -60,6 +63,17 @@ const ExpenseForm: React.FC<{
     });
   }
 
+  const cancelFormHandler = () => {
+    setEnteredExpenseFormInput({
+      title: "",
+      amount: 0,
+      date: new Date(),
+    });
+    if (props.onCancel) {
+      props.onCancel();
+    }
+  };
+
   return (
     <form onSubmit={submitHandler}>
       <div className="new-expense__controls">
@@ -96,6 +110,9 @@ const ExpenseForm: React.FC<{
         </div>
       </div>
       <div className="new-expense__actions">
+        <button type="button" onClick={cancelFormHandler}>
+          Cancel
+        </button>
         <button type="submit">Add Expense</button>
       </div>
     </form>

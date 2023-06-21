@@ -4,6 +4,7 @@ import Card from "../Global/Card";
 import "./Expenses.css";
 import ExpensesFilter from "./ExpensesFilter";
 import ExpenseData from "../Model/ExpenseData";
+import ExpensesChart from "./ExpensesChart";
 
 const Expenses: React.FC<{
   expenses: ExpenseData[];
@@ -27,6 +28,7 @@ const Expenses: React.FC<{
         minYear={2019}
         maxYear={2028}
       />
+      <ExpensesChart expenses={filteredExpenses} />
       {filteredExpenses.map((expenseItem) => (
         <ExpenseItem key={expenseItem.id!} expense={expenseItem} />
       ))}
