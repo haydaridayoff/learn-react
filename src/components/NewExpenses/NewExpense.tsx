@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 
 import "./NewExpense.css";
 import ExpenseData from "../Model/ExpenseData";
 import ExpenseForm from "./ExpenseForm";
 
-const NewExpense: React.FC<{
-  onAddExpense: (ExpenseData: ExpenseData) => void;
-}> = (props) => {
+interface Props {
+  onAddExpense: (expenseData: ExpenseData) => void;
+}
+
+const NewExpense: React.FC<Props> = (props) => {
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const saveExpenseDataHandler = (enteredExpenseData: ExpenseData) => {
     const expenseData: ExpenseData = {
       ...enteredExpenseData,
@@ -17,11 +20,22 @@ const NewExpense: React.FC<{
     console.log(expenseData);
   };
 
-  return (
-    <div className="new-expense">
-      <ExpenseForm onSaveExpenseData={saveExpenseDataHandler} />
-    </div>
+  const cancelHandler = () => {
+    setIsEditing(false);
+  };
+
+  let form = (
+    <ExpenseForm
+      onSaveExpenseData={saveExpenseDataHandler}
+      onCancel={cancelHandler}
+    />
   );
+
+  if (!isEditing) {
+    form = <button onClick={() => setIsEditing(true)}>Add New Expense</button>;
+  }
+
+  return <div className="new-expense">{form}</div>;
 };
 
 export default NewExpense;
